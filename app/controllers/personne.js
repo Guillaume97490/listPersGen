@@ -19,37 +19,6 @@ exports.index = (req, res) => {
     });
 };
 
-// exports.login = (req, res) => {
-//     // Personne.find({}, function(err, personnes) {
-//     // if (err) throw err;
-//         res.render('./user/login.ejs', {
-//             title: 'Connexion',
-//         });
-//     // });
-// };
-
-// exports.register = (req, res) => {
-//     // Personne.find({}, function(err, personnes) {
-//     // if (err) throw err;
-//         res.render('./user/register.ejs', {
-//             title: 'Inscription',
-//         });
-//     // });
-// };
-// exports.saveRegister = (req, res) => {
-
-//     let newUser = User({ // create a new item
-//         username: req.body.username,
-//         password: req.body.password
-//     });
-
-//     newUser.save(function(err) { // save the new item
-//         if (err) throw err;
-//         // console.log('Personne created successfully.');        
-//         res.redirect("/personne"); // redirect to index
-//     });
-// };
-
 exports.show = (req, res) => {
     Personne.findById(req.params.id, function(err, personne) {
         if (err) throw err;
@@ -71,16 +40,19 @@ exports.add = (req, res) => {
 
 
 exports.save = (req, res) => {
-    console.log(req.files);
     let sampleFile = req.files.photo;
+
     if (!req.files || Object.keys(req.files).length === 0) {
         sampleFile.name = null;
     }
 
-    if (req.files.mimetype != 'image/*'){
-        sampleFile.name = null;
+    if ((sampleFile.mimetype != 'image/png')   &&
+        (sampleFile.mimetype != 'image/jpg')   && 
+        (sampleFile.mimetype != 'image/gif')   && 
+        (sampleFile.mimetype != 'image/jpeg'))
+        {
+            sampleFile.name = null;
     }
-
 
     
     sampleFile.mv(`${__dirname}/../../public/uploads/${sampleFile.name}`, function(err) {
@@ -169,45 +141,92 @@ exports.edit = (req, res) => {
 }
 
 exports.update = (req, res) => {
-    
-    if (!req.files || Object.keys(req.files).length === 0 ) {
-        return res.status(400).send('No files were uploaded.');
+
+    let params = {
+        nom: req.body.nom,
+        prenom: req.body.prenom,
+        genre: req.body.genre,
+        dob: req.body.dob,
+        ville: req.body.ville,
+        domaine: req.body.domaine,
     }
 
-    let sampleFile = req.files.photo;
-    sampleFile.mv(`${__dirname}/../../public/uploads/${sampleFile.name}`, function(err) {
-        if (err){
-            return res.status(500).send(err);
-        }
-
-    Personne.findById(req.params.id, function(err, item) {
-        if (item.enabled === false){
-            Personne.find({}, function(err, items) {
-                if (err) throw err;
-                res.render('./personne/index.ejs', {
-                    data: items,
-                    errorMsg: 'Oups ! opération non permise',
-                    title: 'Accueil'
-                });
-            });
-        }
-        else if (req.body.id){
-            Personne.findByIdAndUpdate(req.params.id,{
+    if (req.files){
+        let sampleFile = req.files.photo;
+        if ((sampleFile.mimetype == 'image/png')   &&
+            (sampleFile.mimetype == 'image/jpg')   && 
+            (sampleFile.mimetype == 'image/gif')   && 
+            (sampleFile.mimetype == 'image/jpeg'))
+            {
+            params = {
                 nom: req.body.nom,
                 prenom: req.body.prenom,
                 genre: req.body.genre,
                 dob: req.body.dob,
                 ville: req.body.ville,
                 domaine: req.body.domaine,
-                photo: sampleFile.name,
-            }, 
-            function(err, item) {
-                if (err) throw err;
-                res.redirect("/personne");
-            });
+                photo: sampleFile.name
+            }
         }
-    })
-})
+
+
+        sampleFile.mv(`${__dirname}/../../public/uploads/${sampleFile.name}`, function(err) {
+            if (err){
+                return res.status(500).send(err);
+            }
+    
+            Personne.findById(req.params.id, function(err, item) {
+                if (item.enabled === false){
+                    Personne.find({}, function(err, items) {
+                        if (err) throw err;
+                        res.render('./personne/index.ejs', {
+                            data: items,
+                            errorMsg: 'Oups ! opération non permise',
+                            title: 'Accueil'
+                        });
+                    });
+                }
+                else if (req.body.id){
+                    Personne.findByIdAndUpdate(req.params.id,{
+                        nom: req.body.nom,
+                        prenom: req.body.prenom,
+                        genre: req.body.genre,
+                        dob: req.body.dob,
+                        ville: req.body.ville,
+                        domaine: req.body.domaine,
+                        photo: sampleFile.name
+                    },
+                    function(err, item) {
+                        if (err) throw err;
+                        res.redirect("/personne");
+                    });
+                }
+            })
+        })
+    
+
+    }else{
+        Personne.findById(req.params.id, function(err, item) {
+            if (item.enabled === false){
+                Personne.find({}, function(err, items) {
+                    if (err) throw err;
+                    res.render('./personne/index.ejs', {
+                        data: items,
+                        errorMsg: 'Oups ! opération non permise',
+                        title: 'Accueil'
+                    });
+                });
+            }
+            else if (req.body.id){
+                Personne.findByIdAndUpdate(req.params.id,
+                    params, 
+                function(err, item) {
+                    if (err) throw err;
+                    res.redirect("/personne");
+                });
+            }
+        })
+    }
 }
 
 
