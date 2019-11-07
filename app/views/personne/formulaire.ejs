@@ -1,0 +1,84 @@
+<% include ../partials/head.ejs %>
+<h1 class="text-center">Nouvel personne</h1>
+
+<form <% if(locals.dataEdit){ %>action="/personne/update/<%= dataEdit._id %>" <% } else{ %>action="/personne/save"
+  <% } %> method="post" encType="multipart/form-data">
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-4">
+        <label class="mt-3" for="nom">Nom :</label>
+        <input required class="form-control" <% if(locals.dataEdit){ %> value="<%= dataEdit.nom %>" <% } %> type="text"
+          name="nom" id="nom">
+      </div>
+
+      <div class="col-12 col-md-4">
+        <label class="mt-3" for="prenom">Prénom :</label>
+        <input required class="form-control" <% if(locals.dataEdit){ %> value="<%= dataEdit.prenom %>" <% } %>
+          type="text" name="prenom" id="prenom">
+      </div>
+
+      <div class="col-12 col-md-4">
+        <label class="mt-3" for="text">Genre :</label>
+        <select required class="form-control" name="genre" id="genre">
+          <option <% if(locals.dataEdit){ %> <% if(dataEdit.text == 'h'){ %> selected <% } %> <% } %> value="h">Homme
+          </option>
+          <option <% if(locals.dataEdit){ %> <% if(dataEdit.text == 'f'){ %> selected <% } %> <% } %> value="f">Femme
+          </option>
+        </select>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <label class="mt-3" for="dob">Date de naissance :</label>
+        <input required class="form-control" <% if(locals.dataEdit){ %> value="<%= moment(dataEdit.dob).format( 'YYYY-MM-DD') %>" <% } %> type="date"
+          name="dob" id="dob">
+      </div>
+
+      <div class="col-12 col-md-4">
+        <label class="mt-3" for="ville">Ville :</label>
+        <input required class="form-control" <% if(locals.dataEdit){ %> value="<%= dataEdit.ville %>" <% } %>
+          type="text" name="ville" id="ville">
+      </div>
+      <div class="col-12 col-md-4">
+        <label class="mt-3" for="domaine">Domaine :</label>
+        <input required class="form-control" <% if(locals.dataEdit){ %> value="<%= dataEdit.domaine %>" <% } %>
+          type="text" name="domaine" id="domaine">
+      </div>
+
+        <div class="col-12 col-md-4">
+          <label class="mt-3" for="photo">Photo :</label>
+
+          <input class="form-control-file" <% if(locals.dataEdit){ %> value="<%= dataEdit.photo %>" <% } %> type="file"
+          name="photo" id="photo" accept="image/*">
+          <% if(locals.dataEdit){ %>
+          <img class="photo-personne" src="/uploads/<%= dataEdit.photo %>" alt="<%= dataEdit.photo %>">
+          <% } %>
+        </div>
+
+
+
+      <div class="col-12 mt-4 text-center">
+        <button type="submit" class="btn btn-success">
+          <% if(locals.dataEdit){ %>
+          Modifier
+          <% } else{ %>
+          Ajouter
+          <% } %>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <% if(locals.errorMsg) { %>
+  <h3 class="text-center mgy-40 text-danger"><%= locals.errorMsg %></h3>
+  <% } %>
+
+
+
+  <% if(locals.dataEdit) { %>
+  <input value="<%= dataEdit._id %>" type="hidden" name="id">
+  <% } %>
+
+</form>
+<% include ../partials/footer.ejs %>

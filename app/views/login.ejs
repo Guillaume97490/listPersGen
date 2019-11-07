@@ -1,0 +1,77 @@
+<% include ./partials/head.ejs %>
+<!-- Top content -->
+<div class="top-content">
+
+    <div class="inner-bg">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-sm-8 col-sm-offset-2 text">
+                    <h1><strong>Express Generator</strong> Connexion</h1>
+                    <div class="description">
+                        Description
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-sm-6 col-sm-offset-3 form-box">
+                    <div class="form-top">
+                        <div class="form-top-left">
+                            <h3>Connexion</h3>
+                            <p>Entrer votre email et mot de passe:</p>
+                        </div>
+                        <div class="form-top-right">
+                            <i class="fa fa-key"></i>
+                        </div>
+                    </div>
+                    <div class="form-bottom">
+
+
+                        <% if (error.length > 0) { %>
+                        <div class="alert alert-danger"><%- error %></div>
+                        <% } %>
+
+                        <% if (success.length > 0) { %>
+                        <div class="alert alert-success"><%- success %></div>
+                        <% } %>
+
+
+
+
+                        <form role="form" action="/login" role="form" method="post" class="login-form">
+                            <div class="form-group">
+                                <label class="sr-only" for="form-username">Email</label>
+                                <input type="text" name="email" required placeholder="Email..."
+                                    class="form-username form-control" id="email">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="form-password">Mot de passe</label>
+                                <input type="password" required name="password" placeholder="Mot de passe..."
+                                    class="form-password form-control" id="password">
+                            </div>
+                            <button type="submit" class="btn btn-success">Se connecter</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-sm-6 col-sm-offset-3 social-login">
+                    <h3>...ou se connecter avec:</h3>
+                    <div class="social-login-buttons">
+                        <a class="btn btn-link-1 btn-link-1-facebook" href="#">
+                            <i class="fa fa-facebook"></i> Facebook
+                        </a>
+                        <a class="btn btn-link-1 btn-link-1-twitter" href="#">
+                            <i class="fa fa-twitter"></i> Twitter
+                        </a>
+                        <a class="btn btn-link-1 btn-link-1-google-plus" href="#">
+                            <i class="fa fa-google-plus"></i> Google Plus
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<% include ./partials/footer.ejs %>
+

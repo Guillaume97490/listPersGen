@@ -1,0 +1,72 @@
+<% include ../partials/head.ejs %>
+
+<h1 class="text-center mb-3">Tirage du jour :</h1>
+
+<h3 class="text-center"><%= moment().format('ddd DD MMM YYYY, HH:mm:ss') %></h3>
+
+<div class="container-fluid d-flex justify-content-center">
+<% if(locals.personne){ %>
+    <div class="table-container">
+        <div class="row">
+            <div class="col-12">
+                <table class="table table-responsive d-table table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                        <th class="text-center align-middle">Photo</th>
+                        <th class="text-center align-middle">Prénom</th>
+                        <th class="text-center align-middle">Nom</th>
+                        <!-- <th class="text-center align-middle">Date de naissance</th>
+                        <th class="text-center align-middle">Genre</th>
+                        <th class="text-center align-middle">Ville</th>
+                        <th class="text-center align-middle">Domaine</th> -->
+                        <!-- <th class="text-center align-middle">Date du jour</th> -->
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                        <tr class="<% if( personne.enabled == 0){ %> row-disabled <% } %> ">
+                        <td data-label="Photo" class="text-center align-middle fs20" scope="row">
+                            <img class="photo-personne" src="/uploads/<%= personne.photo %>" alt="<%= personne.photo %>">
+                            
+                        </td>
+                        <td data-label="Nom" class="text-center align-middle fs20" scope="row"><%= personne.nom %></td>
+                        <td data-label="Prénom" class="text-center align-middle fs20" scope="row"><%= personne.prenom %></td>
+                        <!-- <td data-label="Date de naissance" class="text-center align-middle fs20" scope="row">
+                            <%= moment(personne.dob).format( 'DD/MM/YYYY') %>
+                        </td>
+                        <td data-label="Genre" class="text-center align-middle fs20" scope="row">
+                            <% if(personne.genre == 'h'){ %>
+                                Homme
+                            <% } %>
+                            <% if(personne.genre == 'f'){ %>
+                                Femme
+                            <% } %>
+                        </td>
+                        <td data-label="Ville" class="text-center align-middle fs20" scope="row"><%= personne.ville %></td>
+                        <td data-label="Domaine" class="text-center align-middle fs20" scope="row"><%= personne.domaine %></td> -->
+                        <!-- <td class="text-center fs20">
+                            <% if(personne.enabled == 1){ %>
+                            <input class="disabled-checkbox" checked disabled type="checkbox" name="" id="">
+                            <% } else{ %>
+                            <input class="disabled-checkbox" disabled type="checkbox" name="" id="">
+                            <% } %>
+                        </td> -->
+                        <!-- <td data-label="Date du jour" class="text-center align-middle fs20" scope="row"><%= moment().format('DD/MM/YYYY') %></td> -->
+                        </tr>
+                    </tbody>
+        
+                </table>
+            </div>
+            <div class="col-12">
+                <div class="text-center">Prochain tirage : Demain</div>
+            </div>
+
+        </div>
+    </div>
+
+<% } else{ %>
+        Il n'y a plus de candidat...
+<% } %>
+</div>
+
+<% include ../partials/footer.ejs %>
