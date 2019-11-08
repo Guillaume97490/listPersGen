@@ -44,12 +44,16 @@ module.exports = function (app, passport) {
     app.post('/personne/update/:id', personne.update);
     app.get('/personne/delete/:id', personne.delete);
 
+    // app.get('/seed-personne', personne.seedPersonne);
 
 
 
     // Exemple pages
     app.get('/page-public', home.pagePublic);
     
-    app.get('/page-inscrits', home.loggedIn, home.pageInscrits);//home
+    app.get('/page-inscrits', home.loggedIn, home.pageInscrits); // inscrit
+
+    app.get('/page-admin', home.loggedIn, home.pageAdmin); // admin
+
 
 }
