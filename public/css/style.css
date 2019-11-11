@@ -236,17 +236,23 @@ img {
   margin-top: 25px;
 }
 
+.nav-link.active{
+  background: #80a7bf4f;
+  font-weight: 400;
+  border-radius: .3rem;
+
+}
 
 
 .photo-personne{
-  display: block;
-  position: relative;
-  height: 50px;
-  width: 50px;
-  background-size: cover;
-  background-position: center center;
-  border-radius: 100%;
-  margin: auto;
+  height: 100%;
+  width: auto;
+}
+
+.img-crop-circle{
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
 }
 
 .custom-file-label::after{
@@ -265,10 +271,29 @@ img {
   border-top: 1px solid #dee2e6;
 }
 
+tr th{
+  font-weight: 500 !important;
+}
+
+
+@media only screen and (max-width: 853px) {
+  table td, table th{
+    padding: 0.3rem !important;
+  }
+}
+
+
 @media only screen and (max-width: 750px) {
 
-  .table-bordered td, .table-bordered th {
+  table td, table th{
+    padding: 0.75rem !important;
+  }
+
+  .table-bordered td, 
+  .table-bordered th {
     border: 1px solid #dee2e6;
+    border-right: 0;
+    border-left: 0;
   }
   .table-container{
     width: inherit;
@@ -290,7 +315,7 @@ img {
     display: none;
   }
   .table-responsive td {
-    padding-left: 120px;
+    padding-left: 120px !important;
     position: relative;
     margin-top: -1px;
     background: #FFF;
@@ -314,8 +339,13 @@ img {
     font-weight: bold;
   }
   .table-responsive tr {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
   }
+
+  .table-responsive tr:last-of-type {
+    margin-bottom: 0;
+  }
+
   .table-responsive th + td {
     padding-left: 10px;
   }

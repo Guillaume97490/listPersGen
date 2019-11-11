@@ -46,7 +46,8 @@ exports.signup = function(req, res) {
 		res.render('signup', {
 			error : req.flash("error"),
 			success: req.flash("success"),
-			session:req.session
+			session:req.session,
+			title: 'Inscription'
 		});
 	}
 
@@ -66,7 +67,8 @@ exports.login = function(req, res) {
 		res.render('login', {
 			error : req.flash("error"),
 			success: req.flash("success"),
-			session:req.session
+			session:req.session,
+			title: 'Connexion'
 		});
 
 	}

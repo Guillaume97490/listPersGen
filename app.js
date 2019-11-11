@@ -28,13 +28,13 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 
-
 /***************Mongodb configuratrion********************/
 var mongoose = require('mongoose');
 var configDB = require('./config/database.js');
 //configuration ===============================================================
 mongoose.connect(configDB.url,
-    {useNewUrlParser: true}); // connect to our database
+    {useNewUrlParser: true}
+    ); // connect to our database
 
 
 require('./config/passport')(passport); // pass passport for configuration
@@ -74,10 +74,10 @@ console.log('The magic happens on port ' + port);
 
 //catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    res.status(404).render('404', {title: "Sorry, page not found", session: req.sessionbo});
+    res.status(404).render('404', {title: "Désolé, page introuvable", session: req.sessionbo});
 });
 
 app.use(function (req, res, next) {
-    res.status(500).render('404', {title: "Sorry, page not found"});
+    res.status(500).render('404', {title: "Désolé, page introuvable"});
 });
 exports = module.exports = app;

@@ -2,11 +2,7 @@
     <title>Projet Node.js</title>
 </head>-->
 <% include ../partials/head.ejs %>
-<h1 class="text-center">Liste de personnes</h1>
 
-<div class="d-flex mb-3 justify-content-center">
-  <a class="btn btn-success" href="/personne/add/">Ajouter</a>
-</div>
 
 <% if (locals.errorMsg) { %>
 <div>
@@ -18,78 +14,160 @@
   <div class="table-container">
 
 <% if (locals.personnes) { %>
-  
-    <table class="table table-responsive table-bordered">
-      <thead class="thead-dark">
-        <tr>
-          <th class="text-center align-middle">Photo</th>
-          <th class="text-center align-middle">Prénom</th>
-          <th class="text-center align-middle">Nom</th>
-          <th class="text-center align-middle">Date de naissance</th>
-          <th class="text-center align-middle">Genre</th>
-          <th class="text-center align-middle">Ville</th>
-          <th class="text-center align-middle">Domaine</th>
-          <th class="text-center align-middle">Actions</th>
-    
-        </tr>
-      </thead>
-      <tbody>
-        <% personnes.forEach(function(personne) { %>
-        
-        <tr class="<% if( personne.enabled == 0){ %> row-disabled <% } %> ">
-          <td data-label="Photo" class="text-center align-middle fs20" scope="row">
-            
-              <img class="photo-personne" src="/uploads/<%= personne.photo %>" alt="<%= personne.photo %>">
 
-           
+    <div class="card text-center mt-5">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-md-6">
+            <h1 class="text-md-left my-0">Liste de personnes</h1>
+
+          </div>
+          <div class="col-md-6 d-flex justify-content-center justify-content-md-end align-items-center">
             
-          </td>
-          <td data-label="Nom" class="text-center align-middle fs20" scope="row"><%= personne.nom %></td>
-          <td data-label="Prénom" class="text-center align-middle fs20" scope="row"><%= personne.prenom %></td>
-          <td data-label="Date de naissance" class="text-center align-middle fs20" scope="row">
-            <%= moment(personne.dob).format( 'DD/MM/YYYY') %>
-          </td>
-          <td data-label="Genre" class="text-center align-middle fs20" scope="row">
-              <% if(personne.genre == 'h'){ %>
-                Homme
-              <% } %>
-              <% if(personne.genre == 'f'){ %>
-                Femme
-              <% } %>
-          </td>
-          <td data-label="Ville" class="text-center align-middle fs20" scope="row"><%= personne.ville %></td>
-          <td data-label="Domaine" class="text-center align-middle fs20" scope="row"><%= personne.domaine %></td>
-          <!-- <td class="text-center fs20">
-            <% if(personne.enabled == 1){ %>
-            <input class="disabled-checkbox" checked disabled type="checkbox" name="" id="">
-            <% } else{ %>
-            <input class="disabled-checkbox" disabled type="checkbox" name="" id="">
-            <% } %>
-          </td> -->
-          <td data-label="Actions" class="text-center align-middle" scope="row">
-            <div class="btn-group">
+              <a class="btn btn-success" href="/personne/add/">Ajouter</a>
+            
+
+          </div>
+        </div>
+      </div>
+      <div class="card-body p-0">
+          <table class="table table-responsive table-bordered border-right-0 border-left-0 border-top-0 mb-0">
+              <thead class="thead-white">
+                <tr>
+                  <th class="text-center align-middle">Photo</th>
+                  <th class="text-center align-middle">Nom</th>
+                  <th class="text-center align-middle">Date de naissance</th>
+                  <th class="text-center align-middle">Genre</th>
+                  <th class="text-center align-middle">Ville</th>
+                  <th class="text-center align-middle">Domaine</th>
+                  <th class="text-center align-middle">Actions</th>
+            
+                </tr>
+              </thead>
+              <tbody>
+                <% personnes.forEach(function(personne) { %>
+                
+                <tr class="<% if( personne.enabled == 0){ %> row-disabled <% } %> ">
+                  
+                    <td data-label="Photo" class="text-center align-middle fs20" scope="row">
+                      <div class="img-crop-circle m-auto rounded-circle position-relative">
+                        <% if(personne.photo.startsWith('http')) { %>
+                          <img class="photo-personne inline my-0 mx-auto" src="<%= personne.photo %>" alt="<%= personne.prenom %>">
+                        <% } else { %>
+                          <img class="photo-personne inline my-0 mx-auto" src="/uploads/<%= personne.photo %>" alt="<%= personne.prenom %>">
+                        <% } %>
+                        
+                      </div>
+        
+        
+                   
+                    
+                  </td>
+                  <td data-label="Nom" class="text-center align-middle fs20" scope="row"><%= personne.nom.toUpperCase() +' '+ personne.prenom %></td>
+                  <td data-label="Date de naissance" class="text-center align-middle fs20" scope="row">
+                    <%= moment(personne.dob).format( 'DD/MM/YYYY') %>
+                  </td>
+                  <td data-label="Genre" class="text-center align-middle fs20" scope="row">
+                      <% if(personne.genre == 'h'){ %>
+                        Homme
+                      <% } %>
+                      <% if(personne.genre == 'f'){ %>
+                        Femme
+                      <% } %>
+                  </td>
+                  <td data-label="Ville" class="text-center align-middle fs20" scope="row"><%= personne.ville %></td>
+                  <td data-label="Domaine" class="text-center align-middle fs20" scope="row"><%= personne.domaine %></td>
+                  <!-- <td class="text-center fs20">
+                    <% if(personne.enabled == 1){ %>
+                    <input class="disabled-checkbox" checked disabled type="checkbox" name="" id="">
+                    <% } else{ %>
+                    <input class="disabled-checkbox" disabled type="checkbox" name="" id="">
+                    <% } %>
+                  </td> -->
+                  <td data-label="Actions" class="text-center align-middle" scope="row">
+                    <div class="btn-group">
+            
+                      <!-- <a class="btn btn-primary" href="/personne/show/<%= (personne._id) %>">Voir</a> -->
+                      <a class="btn btn-warning <% if(personne.enabled == 0){ %> disabled <% } %>"
+                        href="/personne/edit/<%= (personne._id) %>">Modifier</a>
+                      <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+                      <div class="dropdown-menu <% if(personne.enabled == 0){ %> disabled <% } %>">
+                        <!-- <a class="dropdown-item"
+                          href="/personne/disable/<%= (personne._id) %>"><% if(personne.enabled == 0){ %>
+                          Activer <% } else{ %> Désactiver <% } %></a> -->
+                        <a class="dropdown-item bg-danger text-white <% if(personne.enabled == 0){ %> disabled <% } %>"
+                          href="/personne/delete/<%= (personne._id) %>">Supprimer</a>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+                <% }); %>
+            
+              </tbody>
+            </table>
+      </div>
+      <div class="card-footer text-muted">
+        <div class="row">
+          <div class="col-md-6">
+              <div class="small text-md-left">Page : <%= page%> sur <%= totalPages%></div>
+          </div>
+          <div class="col-md-6">
+            <nav class="mb-2" aria-label="Page navigation example">
+              <ul class="pagination mb-0 justify-content-center">
+                <!-- <li class="page-item <% if(page === 1){%>disabled<% } %>"><a class="page-link" href="/personnes/page-<%= page -1 %>"><<</a></li> -->
+                <% actualPage = page %>
+                <% nbPaginage = 3 %>
+                <% if ((page ) > 2 ) { %>
+                  <li class="page-item">
+                    <a class="page-link" href="/personnes/page-1">1</a>
+                  </li>
+                  <li class="page-item d-none d-sm-block disabled">
+                    <a class="page-link" href="#">...</a>
+                  </li>
+                <% } %>
+                <%for (var i = 0; i < nbPaginage; i++) { %>
+                  <% if ((page + i) <= totalPages ) { %>
+                  
+
+                    <li class="page-item 
+                      <%if(page + i-1 === actualPage) {%> 
+                        active 
+                      <% } %>
+                      <%if(page + i-1 <= 0) {%> 
+                        d-none
+                      <% } %>
+                      ">
+                      <a class="page-link" href="/personnes/page-<%= page + i-1 %>">
+                        <%= page + i-1 %>
+                      </a>
+                    </li>
+                    
+                  <% } %>
+                <% } %>
+                <% if ((page ) < totalPages + 1 ) { %>
+                  <li class="page-item disabled d-none d-sm-block">
+                    <a class="page-link" href="#">...</a>
+                  </li>
+                  <li class="page-item <%if(page === totalPages) {%>active<% } %>">
+                    <a class="page-link" href="/personnes/page-<%= totalPages %>">
+                      <%= totalPages %>
+                    </a>
+                  </li>
+                <% } %>
+                
+                <!-- <li class="page-item <% if(page === totalPages){%>disabled<% } %>"><a class="page-link" href="/personnes/page-<%= page +1 %>">>></a></li> -->
+              </ul>
+            </nav>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  
     
-              <!-- <a class="btn btn-primary" href="/personne/show/<%= (personne._id) %>">Voir</a> -->
-              <a class="btn btn-warning <% if(personne.enabled == 0){ %> disabled <% } %>"
-                href="/personne/edit/<%= (personne._id) %>">Modifier</a>
-              <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-                <span class="sr-only">Toggle Dropdown</span>
-              </button>
-              <div class="dropdown-menu <% if(personne.enabled == 0){ %> disabled <% } %>">
-                <!-- <a class="dropdown-item"
-                  href="/personne/disable/<%= (personne._id) %>"><% if(personne.enabled == 0){ %>
-                  Activer <% } else{ %> Désactiver <% } %></a> -->
-                <a class="dropdown-item bg-danger text-white <% if(personne.enabled == 0){ %> disabled <% } %>"
-                  href="/personne/delete/<%= (personne._id) %>">Supprimer</a>
-              </div>
-            </div>
-          </td>
-        </tr>
-        <% }); %>
-    
-      </tbody>
-    </table>
 
   
 

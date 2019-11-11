@@ -1,7 +1,5 @@
 <% include ./partials/head.ejs %>
 
-<!-- <!DOCTYPE HTML>
-<html> -->
 
 <link rel="stylesheet" href="/css/404.css">
 
@@ -9,20 +7,13 @@
 	<title>404</title>
 </head> -->
 
-
-<!-- <body> -->
 	<div class="wrap">
 		<div class="logo">
 			<h1>404</h1>
 			<p>Une erreur est survenue ! - La page n'a pas été trouver</p>
-
 			<div class="sub">
-				<p><a href="/">Retour</a></p>
+				<p><a onclick="window.history.go(-1);return false" href="#">Retour</a></p>
 			</div>
 		</div>
 	</div>
-	<!---728x90--->
-<!-- </body> -->
-
-
 <% include ./partials/footer.ejs %>

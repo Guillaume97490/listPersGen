@@ -1,5 +1,12 @@
 <% include ../partials/head.ejs %>
-<h1 class="text-center">Nouvel personne</h1>
+<h1 class="text-center">
+
+    <% if(locals.dataEdit) { %>
+        Edition
+      <% } else { %>
+        Nouvel personne
+      <% } %>
+</h1>
 
 <form <% if(locals.dataEdit){ %>action="/personne/update/<%= dataEdit._id %>" <% } else{ %>action="/personne/save"
   <% } %> method="post" encType="multipart/form-data">
@@ -51,7 +58,11 @@
           <input class="form-control-file" <% if(locals.dataEdit){ %> value="<%= dataEdit.photo %>" <% } %> type="file"
           name="photo" id="photo" accept="image/*">
           <% if(locals.dataEdit){ %>
-          <img class="photo-personne" src="/uploads/<%= dataEdit.photo %>" alt="<%= dataEdit.photo %>">
+            <% if(dataEdit.photo.startsWith('http')) { %>
+                <img class="photo-personne" src="<%= dataEdit.photo %>" alt="<%= dataEdit.prenom %>">
+              <% } else { %>
+                <img class="photo-personne" src="/uploads/<%= dataEdit.photo %>" alt="<%= dataEdit.prenom %>">
+            <% } %>
           <% } %>
         </div>
 

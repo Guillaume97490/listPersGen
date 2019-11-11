@@ -1,21 +1,55 @@
-// const controller = {};
 const moment = require('moment');
 require('moment/locale/fr');
+var faker = require('faker');
+faker.locale = "fr";
+
 
 // importing model 
 let Personne = require('../models/personne');
 // let User = require('../models/user');
-
-exports.index = (req, res) => {
+exports.indexPaginate = (req, res) => {
+    // console.log(req.session.role_id)
+    let role = req.session.role_id;
+    // console.log(req.session);
+    let page = Number(req.params.page);
+    let nbParPage = 10;
+    let totalPages = undefined;
+    Personne.estimatedDocumentCount({}, function( err, count){
+        totalPages = Math.ceil(Number(count)/nbParPage) ;
+        if (totalPages < page){
+            return res.redirect('/404');
+        }
+    }).lean();
+    if (page <= 0){
+        return res.redirect('/404');
+    }
+    
     Personne.find({}, function(err, personnes) {
         if (err) throw err;
         res.render('./personne/index.ejs', {
             personnes: personnes,
             title: 'Liste des personnes',
-            moment: moment
+            moment: moment,
+            totalPages:totalPages,
+            page: page,
+            role: role
         });
-    });
+    }).lean().skip(((page)*nbParPage)-nbParPage).limit(nbParPage).sort('_id');
 };
+
+
+// exports.index = (req, res) => {
+//     Personne.find({}, function(err, personnes) {
+//         if (err) throw err;
+//         res.render('./personne/index.ejs', {
+//             personnes: personnes,
+//             title: 'Liste des personnes',
+//             moment: moment
+//         });
+//     }).lean();
+// };
+
+
 
 exports.show = (req, res) => {
     Personne.findById(req.params.id, function(err, personne) {
@@ -30,12 +64,7 @@ exports.show = (req, res) => {
     })
 }
 
-exports.add = (req, res) => {
-    res.render('./personne/formulaire.ejs',{
-        title: 'Nouveau'
-    });
-}
-
+exports.add = (req, res) => res.render('./personne/formulaire.ejs', {title: 'Nouveau'})
 
 exports.save = (req, res) => {
     let params = {
@@ -68,7 +97,7 @@ exports.save = (req, res) => {
             newPersonne.save(function(err) { // save the new item
                 if (err) throw err;
                 // console.log('Personne created successfully.');        
-                res.redirect("/personne"); // redirect to index
+                res.redirect("/personnes/page-1"); // redirect to index
             });
         });
 
@@ -80,17 +109,17 @@ exports.save = (req, res) => {
         newPersonne.save(function(err) { // save the new item
             if (err) throw err;
             // console.log('Personne created successfully.');        
-            res.redirect("/personne"); // redirect to index
+            res.redirect("/personnes/page-1"); // redirect to index
         });
     }
 
 };
 
 exports.tirage = (req, res) => {
-    console.log('================');
+    
     const dateDujour = moment().format('YYYY-MM-DD') + 'T00:00:00.000Z';
-    Personne.find({ $or:[{'dateChoisi': null}, {'dateChoisi' : new Date(dateDujour)}] }, {dateChoisi:1}, function(err, personnes){
-    console.log('================');
+    Personne.find({ $or:[{'dateChoisi': null}, {'dateChoisi' : new Date(dateDujour)}] }, function(err, personnes){
+    
         
         if (err) throw err;
         let candidats = [];
@@ -129,7 +158,7 @@ exports.tirage = (req, res) => {
                             if (err) throw err;
                         });
                     });
-                    // res.redirect("/personne");
+                    // res.redirect("/personnes/page-1");
                 });
             }
         }
@@ -142,31 +171,31 @@ exports.tirage = (req, res) => {
             });
 
         })
-    }).lean();
+    }).lean().select({dateChoisi:1});
 }
 
 exports.edit = (req, res) => {
     Personne.findById(req.params.id, function(err, item) {
         if (item.enabled === false){
-            Personne.find({}, function(err, items) {
-                if (err) throw err;
-                return res.render('./personne/index.ejs', {
-                    data: items,
-                    errorMsg: 'Oups ! opération non permise',
-                    title: 'Accueil'
-                });
-                
-            });
+            // Personne.find({}, function(err, items) {
+            //     if (err) throw err;
+            //     return res.render('./personne/index.ejs', {
+            //         data: items,
+            //         errorMsg: 'Oups ! opération non permise',
+            //         title: 'Accueil'
+            //     });
+            res.redirect("/personnes/page-1");
+            // });
         }
         else if (item){
-            Personne.find({}, function(err, items) {
-              if (err) throw err;
+            // Personne.find({}, function(err, items) {
+            //   if (err) throw err;
                 res.render('./personne/formulaire.ejs', {
                     dataEdit: item,
                     title: 'Edition de ' + item.id,
                     moment: moment
                 });
-            });
+            // });
         };
     })
 }
@@ -214,7 +243,7 @@ exports.update = (req, res) => {
                         params,
                     function(err, item) {
                         if (err) throw err;
-                        res.redirect("/personne");
+                        res.redirect("/personnes/page-1");
                     });
                 }
             })
@@ -222,21 +251,22 @@ exports.update = (req, res) => {
     }else{
         Personne.findById(req.params.id, function(err, item) {
             if (item.enabled === false){
-                Personne.find({}, function(err, items) {
-                    if (err) throw err;
-                    res.render('./personne/index.ejs', {
-                        data: items,
-                        errorMsg: 'Oups ! opération non permise',
-                        title: 'Accueil'
-                    });
-                });
+                // Personne.find({}, function(err, items) {
+                //     if (err) throw err;
+                //     res.render('./personne/index.ejs', {
+                //         data: items,
+                //         errorMsg: 'Oups ! opération non permise',
+                //         title: 'Accueil'
+                //     });
+                // });
+                res.redirect("/personnes/page-1");
             }
             else if (req.body.id){
                 Personne.findByIdAndUpdate(req.params.id,
                     params, 
                 function(err, item) {
                     if (err) throw err;
-                    res.redirect("/personne");
+                    res.redirect("/personnes/page-1");
                 });
             }
         })
@@ -247,7 +277,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => { 
     Personne.findByIdAndRemove(req.params.id, function(err) {
     if (err) throw err;
-    res.redirect("/personne");
+    res.redirect("/personnes/page-1");
     });
 }
 
@@ -263,17 +293,17 @@ exports.disable = (req, res) => {
             },
             function(err, item) {
                 if (err) throw err;
-                res.redirect("/personne");
+                res.redirect("/personnes/page-1");
             });
         })
     }
 }
 
 exports.reset = (req,res) => {
-    Personne.find({}, function(err, personnes) {
+    Personne.find({dateChoisi: {$ne: null} }, function(err, personnes) {
         if (err) throw err;
         personnes.forEach(personne => {
-            Personne.findByIdAndUpdate(personne.id,{
+            Personne.findByIdAndUpdate(personne._id,{
                 dateChoisi: null,
                 choisi: false
             }, 
@@ -281,30 +311,30 @@ exports.reset = (req,res) => {
                 if (err) throw err;
             });
         });
-        res.redirect("/personne");
-    });
+        res.redirect("/personnes/page-1");
+    }).lean().select({_id:1});
 }
 
 
 exports.seedPersonne = function(req,res){
-    for (let index = 0; index < 90000; index++) {
+    Personne.deleteMany({}, function (err) {
+        if (err) throw err;
+        for (let index = 0; index < 100000; index++) {
+            console.log([index]);
+            let newPersonne = Personne({
+                nom: faker.name.lastName(),
+                prenom: faker.name.firstName(),
+                genre: faker.random.arrayElement(['h','f']),
+                dob: faker.date.past(40, '2000-01-01'),
+                ville: faker.address.city(),
+                domaine: faker.lorem.word(),
+                photo:faker.image.avatar()
+            });
+            newPersonne.save(function(err) { // save the new item
+                if (err) throw err;
+            });
+        }
+        res.redirect('/personnes/page-1')
 
-        console.log([index]);
-
-        let newPersonne = Personne({
-            nom: 'user'+[index],
-            prenom: 'user'+[index],
-            genre: 'h',
-            dob: '2019-11-15T00:00:00.000Z',
-            ville: 'a',
-            domaine: 'a'
-        });
-    
-        newPersonne.save(function(err) { // save the new item
-            if (err) throw err;
-        });
-    }
+    });
 }
-
-
-// module.exports = controller;

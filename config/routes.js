@@ -34,7 +34,8 @@ module.exports = function (app, passport) {
     // Personnes
 
 
-    app.get('/personne', personne.index);
+    // app.get('/personne', personne.index);
+    app.get('/personnes/page-:page', personne.indexPaginate);
     // app.get('/show/:id', personne.show);
     app.get('/personne/add', personne.add);
     app.post('/personne/save', personne.save);
@@ -44,7 +45,7 @@ module.exports = function (app, passport) {
     app.post('/personne/update/:id', personne.update);
     app.get('/personne/delete/:id', personne.delete);
 
-    // app.get('/seed-personne', personne.seedPersonne);
+    app.get('/seed-personne', personne.seedPersonne);
 
 
 

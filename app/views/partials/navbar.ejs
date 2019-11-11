@@ -1,6 +1,6 @@
 <div>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/">ExpressGen</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -12,7 +12,7 @@
               <a class="nav-link" href="/">Accueil<span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <% if(locals.title == 'Liste des personnes') { %> active <% } %> " href="/personne">Liste des personnes</a>
+              <a class="nav-link <% if(locals.title == 'Liste des personnes') { %> active <% } %> " href="/personnes/page-1">Liste des personnes</a>
             </li>
             <li class="nav-item">
               <a class="nav-link <% if(locals.title == 'Tirage') { %> active <% } %> " href="/personne/tirage-du-jour">Tirage</a>
@@ -33,11 +33,8 @@
             </li> -->
           </ul>
           <ul class="navbar-nav">
-            <li class="nav-item"><a class="nav-link" href="/login">Connexion</a></li>
-            <li class="nav-item"><a class="nav-link" href="/signup">Inscription</a></li>
-            
-            
-    
+            <li class="nav-item"><a class="nav-link <% if(locals.title == 'Connexion') { %> active <% } %>" href="/login">Connexion</a></li>
+            <li class="nav-item"><a class="nav-link <% if(locals.title == 'Inscription') { %> active <% } %>" href="/signup">Inscription</a></li>
           </ul>
           <!-- <form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Rechercher" aria-label="Search">
